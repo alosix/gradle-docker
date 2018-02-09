@@ -54,7 +54,7 @@ bintray {
     pkg {
         repo = 'releases'
         name = 'gradle-docker'
-        userOrg = 'palantir'
+        userOrg = System.env.BINTRAY_ORG
         licenses = ['Apache-2.0']
         publications = ['bintray']
     }

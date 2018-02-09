@@ -113,14 +113,15 @@ class DockerRunPlugin implements Plugin<Project> {
                 for (Entry<String,String> volume : ext.volumes.entrySet()) {
                     File localFile = new File(project.projectDir, volume.key)
 
+                    args.add('-v')
+
                     if (!localFile.exists()) {
                        StyledTextOutput o = project.services.get(StyledTextOutputFactory.class).create(DockerRunPlugin)
-                       o.withStyle(Style.Error).println("ERROR: Local folder ${localFile} doesn't exist. Mounted volume will not be visible to container")
-                       throw new IllegalStateException("Local folder ${localFile} doesn't exist.")
+                       o.withStyle(Style.Error).println("ERROR: Local folder ${localFile} doesn't exist. Assuming this is a volumne available under docker volume ls")
+                       args.add("${volume.key}:${volume.value}")
+                    } else {
+                       args.add("${localFile.absolutePath}:${volume.value}")
                     }
-
-                    args.add('-v')
-                    args.add("${localFile.absolutePath}:${volume.value}")
                 }
                 args.addAll(ext.env.collect{ k, v -> ['-e', "${k}=${v}"] }.flatten())
                 args.addAll(['--name', ext.name, ext.image])
