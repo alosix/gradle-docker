@@ -27,7 +27,7 @@ if (System.env.CIRCLE_TEST_REPORTS) {
     test.reports.junitXml.destination = new File(System.env.CIRCLE_TEST_REPORTS, getName())
 }
 
-group 'com.palantir.gradle.docker'
+group 'com.jpowers.gradle.docker'
 version System.env.CIRCLE_TAG ?: gitVersion()
 
 sourceCompatibility = 1.7
